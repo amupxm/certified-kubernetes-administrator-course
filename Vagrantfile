@@ -3,12 +3,12 @@
 
 # Define the number of master and worker nodes
 # If this number is changed, remember to update setup-hosts.sh script with the new hosts IP details in /etc/hosts of each VM.
-NUM_MASTER_NODE = 1
+NUM_MASTER_NODE = 2
 NUM_WORKER_NODE = 2
 
 IP_NW = "192.168.56."
 MASTER_IP_START = 1
-NODE_IP_START = 2
+NODE_IP_START = 3
 LB_IP_START = 30
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
@@ -55,14 +55,14 @@ Vagrant.configure("2") do |config|
 
   # Provision Master Nodes
   (1..NUM_MASTER_NODE).each do |i|
-      config.vm.define "kubemaster" do |node|
+      config.vm.define "kubemaster0#{i}" do |node|
         # Name shown in the GUI
         node.vm.provider "virtualbox" do |vb|
-            vb.name = "kubemaster"
+            vb.name = "kubemaster0#{i}"
             vb.memory = 2048
             vb.cpus = 2
         end
-        node.vm.hostname = "kubemaster"
+        node.vm.hostname = "kubemaster0#{i}"
         node.vm.network :private_network, ip: IP_NW + "#{MASTER_IP_START + i}"
         node.vm.network "forwarded_port", guest: 22, host: "#{2710 + i}"
 
